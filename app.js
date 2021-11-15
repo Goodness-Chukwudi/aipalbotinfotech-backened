@@ -1,37 +1,22 @@
 require("dotenv").config();
 const express = require("express");
 const app = express();
-const helmet = require("helmet");
 require("express-async-errors");
 const mongoose = require("mongoose");
 const log = require("./utils/errorLogger");
 
 app.use(express.json());
-app.use(helmet());
 // Add Access Control Allow Origin headers
-app.use((req, res, next) => {
-	res.setHeader("Access-Control-Allow-Origin", "*");
-	res.header(
-		"Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS"
-	);
-	res.header(
-		"Access-Control-Allow-Headers",
-		"Origin, X-Requested-With, Content-Type, Accept"
-	);
-	if (req.method === "OPTIONS") {
-		res.status(200).statusMessage = "OK";
-	}
-	next();
-});
-// app.use("/", require("./routes/home"));
-// app.use("/comments", require("./routes/comments"));
-// app.use("/reactions", require("./routes/reaction"));
+app.use(require("./utils/headers"));
 app.use("/imageDetail", require("./routes/imageDetail"));
 app.use("/contact", require("./routes/contact"));
 app.use(require("./middleWare/errorHandler"));
 app.use((err, req, res, next) => {
 	log(err);
 });
+
+app.use(require("helmet")());
+app.use(require("compression")());
 
 // Handle Exceptions
 

@@ -1,4 +1,3 @@
-const { Contact } = require("../model/contact");
 const mailer = require("../../utils/mailer");
 
 async function sendContact(input) {
